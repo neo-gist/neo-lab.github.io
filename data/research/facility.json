@@ -2,9 +2,9 @@
   {
     "cat": "Facilities in NEO Lab",
     "cards": [
-      { "img": "B1500A.png", "name": "High-Precision Source-Meter Units", "desc": "Keysight B1500A" },
-      { "img": "Pulse.png", "name": "Pulse Measurement Setup", "desc": "Keysight B2912B + Keysight 33500 Series" },
-      { "img": "PL.png", "name": "Home-Built Photoluminescence Setup", "desc": "Dongwoo-Optron MonoRa322i" },
+      { "img": "B1500A.jpg", "name": "High-Precision Source-Meter Units", "desc": "Keysight B1500A" },
+      { "img": "Pulse.jpg", "name": "Pulse Measurement Setup", "desc": "Keysight B2912B + Keysight 33500 Series" },
+      { "img": "PL.jpg", "name": "Home-Built Photoluminescence Setup", "desc": "Dongwoo-Optron MonoRa322i" },
       { "img": "Transfer.jpg", "name": "2D Material Transfer System with Detection", "desc": "Sejong Science Instruments SLG-STR01" }
     ]
   },
