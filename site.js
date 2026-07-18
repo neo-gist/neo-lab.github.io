@@ -1040,9 +1040,13 @@
   }
 
   /* ---------- Research Projects (5개씩 페이지 넘김) ---------- */
+  /* 지원기관 로고 파일명 매핑 — data/research/partners.json { "한글명": "영문파일명" }.
+     매핑에 있으면 그 파일명(영문)을, 없으면 f 값(한글) 그대로 파일명으로 사용. */
+  let partnerLogos = {};
   function fundLogoImg(pr) {
     if (!pr.f) return '';
-    const b = 'images/partners/' + encodeURIComponent(pr.f);
+    const name = partnerLogos[pr.f] || pr.f;
+    const b = 'images/partners/' + encodeURIComponent(name);
     return '<img class="fund-logo" src="' + b + '.png" data-base="' + b + '" alt="' + pr.f + '" onerror="neoFundErr(this)">';
   }
   function projectRowHTML(pr) {
@@ -1086,9 +1090,9 @@
      부트스트랩
      ========================================================================== */
   async function boot() {
-    let members, projects, papers, news, bibText, jcrRaw, facility, areas;
+    let members, projects, papers, news, bibText, jcrRaw, facility, areas, partners;
     try {
-      [members, projects, papers, news, bibText, jcrRaw, facility, areas] = await Promise.all([
+      [members, projects, papers, news, bibText, jcrRaw, facility, areas, partners] = await Promise.all([
         fetchMembers(),
         fetchJSON('research/projects.json'),
         fetchJSON('publications/patents.json'),
@@ -1096,12 +1100,14 @@
         fetchText('publications/ref.bib').catch(() => ''),
         fetchJSON('publications/jcr.json').catch(() => ({})),
         fetchJSON('research/facility.json').catch(() => []),
-        fetchJSON('research/areas.json').catch(() => [])
+        fetchJSON('research/areas.json').catch(() => []),
+        fetchJSON('research/partners.json').catch(() => ({}))
       ]);
     } catch (err) {
       console.error(err);
       return;
     }
+    partnerLogos = partners || {};
     /* JCR: 저널명을 정규화한 조회표로 변환 */
     Object.keys(jcrRaw || {}).forEach(yr => {
       JCR[yr] = {};
