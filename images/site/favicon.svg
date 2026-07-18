@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" font-family="Arial, Helvetica, sans-serif" font-weight="400">
+  <rect x="0"    y="0" width="23.5" height="100" fill="#C13A2B"/>
+  <rect x="25.5" y="0" width="23.5" height="100" fill="#5C635F"/>
+  <rect x="51"   y="0" width="23.5" height="100" fill="#5C635F"/>
+  <rect x="76.5" y="0" width="23.5" height="100" fill="#5C635F"/>
+  <text x="11.75" y="26" text-anchor="middle" dominant-baseline="central" font-size="32" fill="#fff">G</text>
+  <text x="37.25" y="50" text-anchor="middle" dominant-baseline="central" font-size="32" fill="#fff">I</text>
+  <text x="62.75" y="79" text-anchor="middle" dominant-baseline="central" font-size="32" fill="#fff">S</text>
+  <text x="88.25" y="51" text-anchor="middle" dominant-baseline="central" font-size="32" fill="#fff">T</text>
+</svg>
