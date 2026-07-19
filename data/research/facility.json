@@ -2,37 +2,37 @@
   {
     "cat": "Facilities in NEO Lab",
     "cards": [
-      { "img": "B1500A.jpg", "name": "High-Precision Source-Meter Units", "desc": "Keysight B1500A" },
-      { "img": "Pulse.jpg", "name": "Pulse Measurement Setup", "desc": "Keysight B2912B + Keysight 33500 Series" },
-      { "img": "PL.jpg", "name": "Home-Built Photoluminescence Setup", "desc": "Dongwoo-Optron MonoRa322i" },
-      { "img": "Transfer.jpg", "name": "2D Material Transfer System with Detection", "desc": "Sejong Science Instruments SLG-STR01" }
+      { "img": "B1500A", "name": "High-Precision Source-Meter Units", "desc": "Keysight B1500A" },
+      { "img": "Pulse", "name": "Pulse Measurement Setup", "desc": "Keysight B2912B + Keysight 33500 Series" },
+      { "img": "PL", "name": "Home-Built Photoluminescence Setup", "desc": "Dongwoo-Optron MonoRa322i" },
+      { "img": "Transfer", "name": "2D Material Transfer System with Detection", "desc": "Sejong Science Instruments SLG-STR01" }
     ]
   },
   {
     "cat": "G-NICS Clean Room",
     "cards": [
-      { "img": "EBL.png", "name": "E-beam Lithography", "desc": "" },
-      { "img": "EBE.png", "name": "E-beam Evaporator", "desc": "" },
-      { "img": "Mask.png", "name": "Mask Aligner", "desc": "" },
-      { "img": "ICP-RIE.png", "name": "ICP-RIE", "desc": "" },
-      { "img": "CCP-RIE.png", "name": "Reactive ion etching", "desc": "" },
-      { "img": "ALD.png", "name": "Atomic Layer Deposition", "desc": "" },
-      { "img": "PECVD.png", "name": "PECVD", "desc": "" },
-      { "img": "RTA.png", "name": "Rapid Thermal Annealing", "desc": "" },
-      { "img": "SEM.png", "name": "SEM", "desc": "" },
-      { "img": "Elipsometer.png", "name": "Elipsometer", "desc": "" }
+      { "img": "EBL", "name": "E-beam Lithography", "desc": "" },
+      { "img": "EBE", "name": "E-beam Evaporator", "desc": "" },
+      { "img": "Mask", "name": "Mask Aligner", "desc": "" },
+      { "img": "ICP-RIE", "name": "ICP-RIE", "desc": "" },
+      { "img": "CCP-RIE", "name": "Reactive ion etching", "desc": "" },
+      { "img": "ALD", "name": "Atomic Layer Deposition", "desc": "" },
+      { "img": "PECVD", "name": "PECVD", "desc": "" },
+      { "img": "RTA", "name": "Rapid Thermal Annealing", "desc": "" },
+      { "img": "SEM", "name": "SEM", "desc": "" },
+      { "img": "Elipsometer", "name": "Elipsometer", "desc": "" }
     ]
   },
   {
     "cat": "Frequently Used Equipments @ GAIA, GIST",
     "cards": [
-      { "img": "FIB.jpg", "name": "Focused Ion Beam", "desc": "" },
-      { "img": "TEM.png", "name": "Transmission Electron Microscope", "desc": "" },
-      { "img": "UHR-FESEM.jpg", "name": "Ultra-High-Resolution FE-SEM", "desc": "" },
-      { "img": "FT-IR.jpg", "name": "FT-IR", "desc": "" },
-      { "img": "Raman.jpg", "name": "Raman Spectroscopy", "desc": "" },
-      { "img": "XPS.jpg", "name": "X-ray Photoelectron Spectroscopy", "desc": "" },
-      { "img": "AFM.jpg", "name": "Atomic Force Microscope", "desc": "" }
+      { "img": "FIB", "name": "Focused Ion Beam", "desc": "" },
+      { "img": "TEM", "name": "Transmission Electron Microscope", "desc": "" },
+      { "img": "UHR-FESEM", "name": "Ultra-High-Resolution FE-SEM", "desc": "" },
+      { "img": "FT-IR", "name": "FT-IR", "desc": "" },
+      { "img": "Raman", "name": "Raman Spectroscopy", "desc": "" },
+      { "img": "XPS", "name": "X-ray Photoelectron Spectroscopy", "desc": "" },
+      { "img": "AFM", "name": "Atomic Force Microscope", "desc": "" }
     ]
   }
 ]
