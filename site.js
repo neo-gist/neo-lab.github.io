@@ -22,6 +22,28 @@
   const memberNames = {};
   function normName(s) { return (s || '').toLowerCase().replace(/[^a-z]/g, ''); }
 
+  /* 영문 이름 → 사진 파일명(성+이름, 소문자·영숫자). "Haein Cho" → "chohaein" */
+  function enToFile(en) {
+    const parts = (en || '').replace(/[.,]/g, ' ').trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return '';
+    if (parts.length === 1) return parts[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+    const surname = parts[parts.length - 1];
+    const given = parts.slice(0, -1).join('');
+    return (surname + given).toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
+  /* 멤버 사진 img 태그 — img 에 확장자가 있으면 그대로, 없거나 비면 영문이름(성+이름)으로
+     추정한 파일명에 확장자(.jpg→.png→…)를 자동 탐색. 다 없으면 제거되어 이니셜 표시. */
+  function memberFaceImg(m) {
+    const alt = (m.en || m.ko || '');
+    if (m.img && /\.[a-z0-9]+$/i.test(m.img)) {
+      return '<img loading="lazy" src="images/members/' + u(m.img) + '" alt="' + alt + '" onerror="this.remove()">';
+    }
+    const base = m.img || enToFile(m.en);
+    if (!base) return '';
+    const path = 'images/members/' + u(base);
+    return '<img loading="lazy" src="' + path + '.jpg" data-base="' + path + '" data-i="0" data-fb="remove" alt="' + alt + '" onerror="neoImg(this)">';
+  }
+
   /* JCR 랭킹 — data/jcr.json (연도 → 저널 → {field,pct,if}). 논문 연도-1 로 조회 */
   const JCR = {};   // JCR[year][정규화 저널명] = {field, pct, if}
   function normJournal(s) { return (s || '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, ''); }
@@ -213,9 +235,7 @@
   function personCard(p) {
     const interests = (p.ri || []).filter(Boolean).join(', ');
     const edu = (p.education || []).filter(Boolean);
-    const face = p.img
-      ? '<img loading="lazy" src="images/members/' + u(p.img) + '" alt="' + (p.en || p.ko) + '" onerror="this.remove()">'
-      : (p.init || '');
+    const face = (p.init || '') + memberFaceImg(p);
     const nameLine = p.en
       ? p.en + ' <span class="card-person__ko">(' + p.ko + ')</span>'
       : p.ko;
@@ -249,9 +269,7 @@
   function postdocCard(p) {
     const interests = (p.ri || []).filter(Boolean).join(', ');
     const edu = (p.education || []).filter(Boolean);
-    const face = p.img
-      ? '<img loading="lazy" src="images/members/' + u(p.img) + '" alt="' + (p.en || p.ko) + '" onerror="this.remove()">'
-      : (p.init || '');
+    const face = (p.init || '') + memberFaceImg(p);
     const nameLine = p.en
       ? p.en + ' <span class="card-postdoc__ko">(' + p.ko + ')</span>'
       : p.ko;
@@ -325,10 +343,8 @@
   function openMember(id) {
     const m = memberById[id];
     if (!m) return;
-    const photoBase = 'images/members/';
     const face = '<div class="bio-photo" style="background:' + m._bg + '">' +
-      (m.img ? '<img loading="lazy" src="' + photoBase + u(m.img) + '" alt="' + (m.en || m.ko) + '" onerror="this.remove()">' : '') +
-      (m.init || '') + '</div>';
+      (m.init || '') + memberFaceImg(m) + '</div>';
     const tags = (m.ri || []).filter(Boolean).map(t => '<span class="tag">' + t + '</span>').join('');
     const lines = [];
     if (m.email) lines.push('<div class="bio-line"><span class="bio-line__k">Email</span><a class="bio-line__v" href="mailto:' + m.email + '">' + m.email + '</a></div>');
@@ -437,10 +453,14 @@
      ========================================================================== */
   function thumb(folder, hero) {
     const icon = '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="M21 15l-5-5L5 21"/></svg>';
-    if (hero) {
-      return '<div class="media-card__thumb"><img loading="lazy" src="images/' + folder + '/' + u(hero) + '" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML=\'' + icon.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '\'"></div>';
+    if (!hero) return '<div class="media-card__thumb">' + icon + '</div>';
+    const style = 'width:100%;height:100%;object-fit:cover';
+    /* 확장자가 있으면 그대로, 없으면 파일명만으로 확장자(.jpg→.png→…) 자동 탐색 */
+    if (/\.[a-z0-9]+$/i.test(hero)) {
+      return '<div class="media-card__thumb"><img loading="lazy" src="images/' + folder + '/' + u(hero) + '" alt="" style="' + style + '" onerror="this.parentElement.innerHTML=\'' + icon.replace(/'/g, '&#39;').replace(/"/g, '&quot;') + '\'"></div>';
     }
-    return '<div class="media-card__thumb">' + icon + '</div>';
+    const base = 'images/' + folder + '/' + u(hero);
+    return '<div class="media-card__thumb"><img loading="lazy" src="' + base + '.jpg" data-base="' + base + '" data-i="0" data-fb="icon" data-icon="' + encodeURIComponent(icon) + '" alt="" style="' + style + '" onerror="neoImg(this)"></div>';
   }
 
   /* Facility — 카테고리별 가로 스크롤 카드(In the Media 스타일, 클릭·태그·날짜 없음) */
@@ -552,11 +572,17 @@
       ? ' <a class="pdf-btn" data-pdf="' + p.key + '" href="' + pdfHref + '" target="_blank" rel="noopener"' + (pdfState[p.key] ? '' : ' hidden') + '><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>PDF</a>'
       : '';
     const cite = p.cite ? ' <span class="pv-c">' + p.cite + '</span>' : '';
-    const coverSrc = p.cover ? 'images/covers/' + (/\.[a-z0-9]+$/i.test(p.cover) ? p.cover : p.cover + '.jpg') : '';
-    const cover = coverSrc
-      ? '<div class="paper__cover"><img loading="lazy" src="' + coverSrc + '" alt="Cover" onerror="this.remove()"></div>'
-      : '';
-    return '<div class="paper rise' + (coverSrc ? ' paper--cover' : '') + '"><div class="paper__meta">' + p.y + stateBadge(p.state) + '</div>' +
+    /* 커버: cover 값에 확장자가 있으면 그대로, 없으면 파일명만으로 확장자(.jpg→.png→…) 자동 탐색 */
+    let cover = '';
+    if (p.cover) {
+      if (/\.[a-z0-9]+$/i.test(p.cover)) {
+        cover = '<div class="paper__cover"><img loading="lazy" src="images/covers/' + u(p.cover) + '" alt="Cover" onerror="this.remove()"></div>';
+      } else {
+        const cb = 'images/covers/' + u(p.cover);
+        cover = '<div class="paper__cover"><img loading="lazy" src="' + cb + '.jpg" data-base="' + cb + '" data-i="0" data-fb="remove" alt="Cover" onerror="neoImg(this)"></div>';
+      }
+    }
+    return '<div class="paper rise' + (cover ? ' paper--cover' : '') + '"><div class="paper__meta">' + p.y + stateBadge(p.state) + '</div>' +
       '<div class="paper__main"><div class="paper__titleline">' + titleEl + revTag + '</div>' +
       '<div class="paper__authors">' + p.a + '</div>' +
       '<div class="paper__venue">' + jName + cite + pdfBtn + '</div></div>' + cover + '</div>';
@@ -1084,6 +1110,16 @@
     const i = +img.dataset.i || 0;
     if (i < exts.length) { img.dataset.i = i + 1; img.src = img.dataset.base + '.' + exts[i]; }
     else { img.remove(); }
+  };
+
+  /* 확장자 자동 탐색(첫 시도 .jpg 이후 순차) 후 실패 시 폴백.
+     data-fb="icon" → 부모를 아이콘으로 교체(Facility), 그 외 → 제거(멤버 사진 → 이니셜) */
+  window.neoImg = function (img) {
+    const exts = ['jpg', 'png', 'jpeg', 'webp'];
+    const i = (+img.dataset.i || 0) + 1;
+    if (i < exts.length) { img.dataset.i = i; img.src = img.dataset.base + '.' + exts[i]; return; }
+    if (img.dataset.fb === 'icon' && img.dataset.icon) img.parentElement.innerHTML = decodeURIComponent(img.dataset.icon);
+    else img.remove();
   };
 
   /* ==========================================================================
