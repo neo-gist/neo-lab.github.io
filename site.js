@@ -35,30 +35,6 @@
     'view-research-detail': 'view-research'
   };
   var suppressHistory = false;   // popstate/초기 복원 중에는 주소를 다시 쌓지 않음
-  var pendingScroll = null;      // 뒤로/앞으로 이동 시 복원할 스크롤 위치
-  var restoreToken = 0;          // 스크롤 복원 재시도 취소용 토큰
-
-  /* 저장된 스크롤 위치로 복원.
-     첫 방문 등으로 목록 이미지가 아직 로딩 중이면 페이지가 짧아 목표 위치까지 못 내려감.
-     → 목표 높이가 확보되고 실제로 그 위치에 닿을 때까지(최대 1.5초) 매 프레임 다시 맞춤. */
-  function restoreScroll(target) {
-    if (!target) { window.scrollTo(0, 0); return; }
-    var token = ++restoreToken;
-    var de = document.documentElement, prevSB = de.style.scrollBehavior;
-    de.style.scrollBehavior = 'auto';
-    var deadline = Date.now() + 1500;
-    (function apply() {
-      if (token !== restoreToken) { de.style.scrollBehavior = prevSB; return; } // 다른 이동 시작됨
-      window.scrollTo(0, target);
-      var maxScroll = de.scrollHeight - window.innerHeight;
-      var reached = Math.abs(window.scrollY - target) <= 2;
-      if ((reached && maxScroll >= target - 2) || Date.now() > deadline) {
-        de.style.scrollBehavior = prevSB;
-        return;
-      }
-      requestAnimationFrame(apply);
-    })();
-  }
 
   function viewToPath(viewId) {
     var slug = ROUTES[viewId];
@@ -775,9 +751,6 @@
   }
 
   function navigate(viewId, jumpId, filter, extraState) {
-    /* 화면을 숨기기 전에 현재 스크롤 위치를 먼저 확보 — 숨기는 순간 페이지가 짧아지며
-       브라우저가 scrollY 를 위로 깎아버리기 때문(그러면 엉뚱한 값이 저장됨) */
-    var leavingScroll = window.pageYOffset || document.documentElement.scrollTop || 0;
     screens.forEach(s => s.classList.toggle('is-active', s.id === viewId));
     const key = viewId === 'view-entry' ? 'view-activity'
       : viewId === 'view-bio' ? 'view-members'
@@ -785,19 +758,19 @@
     menuLinks.forEach(l => l.classList.toggle('is-current', l.dataset.view === key));
     if (viewId === 'view-pubs' && filter) applyFilter(filter);
     if (!suppressHistory) {
-      /* 지금 화면을 떠나기 전에, 현재 스크롤 위치를 현재 기록에 저장 → 뒤로가기 때 복원 */
-      try { history.replaceState(Object.assign({}, history.state || {}, { scroll: leavingScroll }), ''); } catch (e) {}
+      /* 멤버 상세로 들어갈 때 — 떠나는 목록 기록에 "그 카드로 돌아갈 위치"를 남겨둠.
+         (뒤로가기 하면 저장된 mcard-<id> 카드로 이동. 나머지 화면은 스크롤 복원 없음) */
+      var leaving = Object.assign({}, history.state || {});
+      if (extraState && extraState.detail === 'member' && extraState.id != null) {
+        leaving.jump = 'mcard-' + extraState.id;
+      }
+      try { history.replaceState(leaving, ''); } catch (e) {}
       var st = Object.assign({ v: viewId, j: jumpId, f: filter }, extraState || {});
       try { history.pushState(st, '', viewToPath(viewId)); } catch (e) {}
     }
     closeSheet();
     setTimeout(() => {
-      if (pendingScroll != null) {
-        /* 뒤로/앞으로 이동 — 저장해 둔 위치로 복원(이미지 로딩까지 기다리며 재시도) */
-        var target = pendingScroll;
-        pendingScroll = null;
-        restoreScroll(target);
-      } else if (jumpId) {
+      if (jumpId) {
         const el = byId(jumpId);
         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } else {
@@ -1301,15 +1274,15 @@
   /* 스크롤 위치는 우리가 직접 관리(브라우저 자동복원 끔) */
   if ('scrollRestoration' in history) { try { history.scrollRestoration = 'manual'; } catch (e) {} }
 
-  /* 뒤로/앞으로 — 기록에 저장된 화면(그리고 상세 카드)과 스크롤 위치를 복원 */
+  /* 뒤로/앞으로 — 기록에 저장된 화면(그리고 상세 카드)을 복원.
+     Members 목록으로 돌아갈 때만 저장해 둔 카드(mcard-<id>)로 이동, 나머지는 맨 위 */
   window.addEventListener('popstate', function (e) {
     var st = e.state || {};
     suppressHistory = true;
-    pendingScroll = (typeof st.scroll === 'number') ? st.scroll : 0;
     if (st.detail === 'member') openMember(st.id);
     else if (st.detail === 'article') openArticle(st.atype, st.id);
     else if (st.detail === 'research') openResearch(st.id);
-    else navigate(st.v || pathToView(), st.j, st.f);
+    else navigate(st.v || pathToView(), st.jump || st.j, st.f);
     suppressHistory = false;
   });
 
@@ -1319,7 +1292,7 @@
     suppressHistory = true;
     navigate(viewId);
     suppressHistory = false;
-    try { history.replaceState({ v: viewId, scroll: 0 }, '', viewToPath(viewId)); } catch (e) {}
+    try { history.replaceState({ v: viewId }, '', viewToPath(viewId)); } catch (e) {}
   })();
 
   /* 데이터 로딩과 무관하게, 정적 콘텐츠(히어로·섹션 제목)를 즉시 표시 */
