@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" font-family="Arial, Helvetica, sans-serif" font-weight="400">
-  <rect x="0"    y="0" width="23.5" height="100" fill="#C13A2B"/>
-  <rect x="25.5" y="0" width="23.5" height="100" fill="#5C635F"/>
-  <rect x="51"   y="0" width="23.5" height="100" fill="#5C635F"/>
-  <rect x="76.5" y="0" width="23.5" height="100" fill="#5C635F"/>
-  <text x="11.75" y="26" text-anchor="middle" dominant-baseline="central" font-size="32" fill="#fff">G</text>
-  <text x="37.25" y="50" text-anchor="middle" dominant-baseline="central" font-size="32" fill="#fff">I</text>
-  <text x="62.75" y="79" text-anchor="middle" dominant-baseline="central" font-size="32" fill="#fff">S</text>
-  <text x="88.25" y="51" text-anchor="middle" dominant-baseline="central" font-size="32" fill="#fff">T</text>
-</svg>
+<?xml version="1.0" encoding="UTF-8"?><svg id="_이어_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55.81 53.96"><defs><style>.cls-1{fill:#cf2b1b;}.cls-2{fill:#4f5b53;}</style></defs><g><path class="cls-2" d="M16.71,18.62l11.13,8.33-5.49,2.33,11.11-4.59-14.05-10.57c-1.66-1.25-3.84-1.54-5.77-.76l-9.91,3.98C1.48,18.24,.01,20.42,.01,22.84v29.96H5.53l-.02-29.68,11.21-4.5Z"/><path class="cls-1" d="M36.4,39.85c1.66,1.25,3.84,1.54,5.77,.76l9.92-3.98c2.25-.9,3.72-3.08,3.72-5.5V1.15h-5.54l.02,29.72-11.21,4.48-11.11-8.33,5.5-2.32-11.11,4.59,14.05,10.56Z"/><path class="cls-2" d="M39.08,22.49l.05,6.43,5.57-2.21v-3.58c-.02-1.86-.9-3.6-2.38-4.72L19.37,1.19C17.7-.06,15.5-.35,13.58,.44L.02,5.95v6.48L16.76,5.72l22.32,16.77Z"/><path class="cls-1" d="M55.79,41.54l-16.67,6.74L16.78,31.54l-.06-6.52-5.58,2.26v3.56c0,1.86,.88,3.61,2.37,4.73l22.9,17.2c1.66,1.25,3.85,1.53,5.78,.76l13.64-5.5-.03-6.48Z"/></g><polygon class="cls-2" points="11.13 40.38 16.68 44.55 16.68 52.8 11.13 52.8 11.13 40.38"/><polygon class="cls-1" points="44.69 1.15 39.15 1.15 39.15 9.44 44.69 13.61 44.69 1.15"/></svg>
